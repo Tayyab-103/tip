@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Modal } from '../components/Modal'
 import TokenSelect from './TokenSelect'
 import { UserButton } from './UserButton'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 const Bonus = styled.button`
   all: unset;
@@ -89,6 +90,10 @@ export default function Header() {
           <Logo to="/">
             <img alt="Gamba logo" src="/logo.svg" />
           </Logo>
+        </div>
+
+        <div>
+        <ConnectButton />
         </div>
         <div style={{ display: 'flex', gap: '10px', alignItems: 'center', position: 'relative' }}>
           {pool.jackpotBalance > 0 && (

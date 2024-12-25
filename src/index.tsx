@@ -11,8 +11,22 @@ import App from './App'
 import { DEFAULT_POOL, PLATFORM_CREATOR_ADDRESS, PLATFORM_CREATOR_FEE, PLATFORM_JACKPOT_FEE, RPC_ENDPOINT, TOKEN_METADATA, TOKEN_METADATA_FETCHER } from './constants'
 import './styles.css'
 
-const root = ReactDOM.createRoot(document.getElementById('root')!)
+import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import '@rainbow-me/rainbowkit/styles.css'
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { WagmiProvider } from 'wagmi'
+import { arbitrum, base, mainnet, optimism, polygon } from 'wagmi/chains'
 
+
+const config = getDefaultConfig({
+  appName: 'My RainbowKit App',
+  projectId: 'YOUR_PROJECT_ID',
+  chains: [mainnet, polygon, optimism, arbitrum, base],
+  ssr: true,
+});
+const queryClient = new QueryClient();
+
+const root = ReactDOM.createRoot(document.getElementById('root')!)
 function Root() {
   const wallets = React.useMemo(
     () => [
@@ -47,7 +61,14 @@ function Root() {
                     defaultJackpotFee={PLATFORM_JACKPOT_FEE}
                     defaultPool={DEFAULT_POOL}
                   >
-                    <App />
+
+                    <WagmiProvider config={config}>
+                      <QueryClientProvider client={queryClient}>
+                        <RainbowKitProvider>
+                          <App />
+                        </RainbowKitProvider>
+                      </QueryClientProvider>
+                    </WagmiProvider>
                   </GambaPlatformProvider>
                 </GambaProvider>
               </SendTransactionProvider>
